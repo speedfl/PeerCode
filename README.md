@@ -31,3 +31,25 @@ create and join room:
 ## Video-demo
 
 <https://raw.githubusercontent.com/PeerCodeProject/PeerCode/main/docs/peercode1.mp4>
+
+## Known issues 
+
+### Linux x64
+
+You can get following error when running the extension
+
+```
+Activating extension 'Liquidibrium.peercode' failed: Could not find wrtc binary on the path: @roamhq/wrtc-linux-x64
+```
+
+Looking at `node_modules/@roamhq/wrtc-linux-x64` show the binary
+
+In fact there is another route cause
+
+Go in [node_modules/@roamhq/wrtc/lib/binding.js](node_modules/@roamhq/wrtc/lib/binding.js) and add the error at the end to provide more information
+
+```javascript
+throw new Error("Could not find wrtc binary on the path: @roamhq/wrtc-linux-x64" + err);
+```
+
+Then fix the route cause

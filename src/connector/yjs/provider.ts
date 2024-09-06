@@ -1,5 +1,4 @@
 import { Awareness } from "y-protocols/awareness";
-import { WebrtcProvider } from "../../y-webrtc/y-webrtc";
 import { WebsocketProvider } from "y-websocket";
 import { Observable } from "lib0/observable";
 
@@ -11,7 +10,7 @@ export interface YjsProviderWrapper {
 }
 
 export class RTCProvider implements YjsProviderWrapper {
-  constructor(private provider: WebrtcProvider) {}
+  constructor(private provider: WebsocketProvider) {}
 
   supportsTunneling(): boolean {
     return true;

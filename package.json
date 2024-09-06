@@ -136,9 +136,7 @@
     "test": "node ./out/test/runTest.js",
     "vsce-package": "vsce package",
     "deploy": "vsce publish",
-    "pre-release": "vsce publish --pre-release",
-    "update:wrtc": "node ./scripts/dynamic-patching-wrtc.js",
-    "postinstall": "npm run update:wrtc"
+    "pre-release": "vsce publish --pre-release"
   },
   "devDependencies": {
     "@types/dockerode": "^3.3.23",
@@ -176,7 +174,6 @@
   "dependencies": {
     "@mapbox/node-pre-gyp": "^1.0.11",
     "@peculiar/webcrypto": "^1.4.5",
-    "@roamhq/wrtc": "^0.7.1",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "bufferutil": "^4.0.8",
     "buildcheck": "^0.0.6",

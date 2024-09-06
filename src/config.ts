@@ -20,10 +20,7 @@ export class Config implements IConfig {
       // y-websocket | y-webrtc
       this.configs.set("connector", process.env.CONNECTOR!);
       this.configs.set("webrtcServerURL", process.env.RTC_URL!);
-      this.configs.set(
-        "webSocketServerURL",
-        process.env.WS_URL ?? "wss://yjs-websocket-test.herokuapp.com",
-      );
+      this.configs.set("webSocketServerURL", process.env.WS_URL!);
     }
   }
 

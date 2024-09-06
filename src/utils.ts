@@ -4,7 +4,7 @@ import * as os from "os";
 const globalTemp: typeof globalThis = globalThis;
 
 export function initGlobal(): void {
-  // @ts-expect-error need to set globalThis websocket
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   globalTemp.WebSocket = require("ws");
   // process.env['LOG'] = '*';
 }
