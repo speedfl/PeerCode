@@ -86,7 +86,7 @@ export class DrawingPanel {
             <script> 
                 window.username = "${this.username}";
                 window.roomname = "${this.roomName}";
-                window.serverUrl = "${this.config.getParamSting("webrtcServerURL")}";
+                window.serverUrl = "${this.config.getParamSting("webSocketServerURL")}";
                 window.drawFreeHandLib = "${perfectFreeHandLib}";
 
             </script>
