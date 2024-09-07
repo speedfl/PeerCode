@@ -1,12 +1,9 @@
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 
-import { tunnelClient } from "../../tunneling/tunnel";
 import { ConnAuthInfo, IConnection, IConnector } from "../connection";
-import { RTCProvider, SocketProvider } from "./provider";
+import { SocketProvider } from "./provider";
 import { YjsConnection } from "./YJSConnection";
-import { getWorkspacePath } from "../../core/fs/fileSystemManager";
-import { RegisterRemotePeerTerminalListener } from "../../terminal/rtcTerm/terminal";
 
 export abstract class YjsConnector implements IConnector {
   supportsPassword(): boolean {
@@ -34,7 +31,9 @@ export class YWebSocketConnector extends YjsConnector {
     const provider = new WebsocketProvider(this.wsServerUrl, authInfo.room, ydoc, {
       WebSocketPolyfill: require("ws"), // eslint-disable-line
     });
+
     await this.awaitConnection(provider);
+
     console.debug("Connected to:" + authInfo.room);
 
     return new YjsConnection(

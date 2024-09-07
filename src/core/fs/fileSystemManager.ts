@@ -18,7 +18,7 @@ export class FileSystemManager {
     if (wspath) {
       this.workspacePath = wspath;
     } else {
-      throw new Error("open workspace");
+      throw new Error("please open a workspace first");
     }
   }
 

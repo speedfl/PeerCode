@@ -13,16 +13,20 @@ export class PeerCodeSessionTreeDataProvider
     new vscode.EventEmitter<EmittedEventType>();
 
   constructor(private manager: SessionManager) {}
+
   onPeerAdded(peer: Peer): void {
     this.onDidChangeTreeDataEventEmitter.fire();
   }
+
   onPeerRemoved(peer: Peer): void {
     this.onDidChangeTreeDataEventEmitter.fire();
   }
+
   onAddSession(session: Session): void {
     session.getPeerManager().registerListener(this);
     this.onDidChangeTreeDataEventEmitter.fire();
   }
+
   onRemoveSession(session: Session): void {
     this.onDidChangeTreeDataEventEmitter.fire();
   }
@@ -52,6 +56,6 @@ export class PeerCodeSessionTreeDataProvider
   }
 
   private getSessions(): SessionTreeNode[] {
-    return this.manager.getSessions().map((sess: Session) => new SessionTreeNode(sess));
+    return this.manager.getSessions().map((session: Session) => new SessionTreeNode(session));
   }
 }

@@ -12,12 +12,14 @@ export interface SessionListener {
 
 export class Session {
   constructor(
-    public readonly roomname: string,
+    public readonly roomName: string,
     private readonly username: string,
     private peerManager: PeerManager,
     private shareLocalToRemote: IShareLocalToRemote,
     public readonly provider: YjsProviderWrapper,
     public readonly isOwner: boolean,
+    // Request a path if user is not owner
+    public readonly path?: string,
   ) {}
 
   public getPeerManager(): PeerManager {
@@ -29,13 +31,18 @@ export class Session {
   }
 
   public getRoomName(): string {
-    return this.roomname;
+    return this.roomName;
   }
 
   public shareLocalFile(file: vscode.Uri): Promise<void> {
     return this.shareLocalToRemote.shareFile(file);
   }
+
   public getUsername(): string {
     return this.username;
+  }
+
+  public getPath(): string | undefined {
+    return this.path;
   }
 }

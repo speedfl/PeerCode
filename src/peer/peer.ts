@@ -20,10 +20,10 @@ export class PeerManager extends BaseObservable<PeerConnectionListener> {
     });
   }
 
-  async peerLeft(peer: Peer): Promise<void> {
+  peerLeft(peer: Peer): void {
     console.log("peer joined: " + peer);
     this.peers = this.peers.filter(p => p !== peer);
-    this.notify(async listener => {
+    this.notify(async (listener: PeerConnectionListener): Promise<void> => {
       listener.onPeerRemoved(peer);
     });
   }

@@ -30,6 +30,9 @@ function registerCommands(
   const disposables = [
     vscode.commands.registerCommand("peercode.NewSession", async () => {
       await facade.startSession().catch(async err => {
+        if (err instanceof Error && err.message === "Input Error") {
+          return;
+        }
         console.log("Error in NewSession", err);
         await vscode.window.showErrorMessage(err.message);
       });
@@ -37,6 +40,9 @@ function registerCommands(
 
     vscode.commands.registerCommand("peercode.JoinSession", async () => {
       await facade.joinSession().catch(async err => {
+        if (err instanceof Error && err.message === "Input Error") {
+          return;
+        }
         console.log("Error in JoinSession", err);
         await vscode.window.showErrorMessage(err.message);
       });
@@ -56,6 +62,8 @@ function registerCommands(
     vscode.commands.registerCommand("peercode.shareTerminal", async (session: SessionTreeNode) => {
       await facade.shareTerminal(session.session, workspacePath ? workspacePath : "/");
     }),
+
+    // TODO: leave session, close session
   ];
 
   context.subscriptions.push(...disposables);

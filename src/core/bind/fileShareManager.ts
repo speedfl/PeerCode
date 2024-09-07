@@ -90,7 +90,7 @@ export default class FileShareManager implements IShareLocalToRemote, RemoteFile
     console.log("FileShareManager onAddRemoteFile: onAddRemoteFile :" + fileKey);
     const localUri = this.fileSystem.addFile(fileKey);
     if (!localUri) {
-      console.warn("FileShareManager onAddRemoteFile: localUri is already exist, skipping....");
+      console.warn(`FileShareManager onAddRemoteFile: ${fileKey} already exist, skipping....`);
       return;
     }
     const sharedFile = this.fileStore.getSharedFile(fileKey);
