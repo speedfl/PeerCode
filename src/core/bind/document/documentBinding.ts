@@ -36,7 +36,12 @@ export default class DocumentBinding implements DocumentChannelListener {
     const textEdits = changes.map(change => {
       return new vscode.TextEdit(createRange(change.start, change.end), change.text);
     });
-    await this.applyWorkspaceEdits(this.document, textEdits);
+    // When initializing a project, lot of files comes. It is done in two steps:
+    // Step one: the file is created without anything
+    // Step two: the file is edited with the full content, this results in opening the file in a tab
+    // When 100s to 1000s of files are opened in the editor, vscode freeze
+    // Therefore we let the possibility to force save the file on remoteTextChange when file is empty
+    await this.applyWorkspaceEdits(this.document, textEdits, this.document.getText().length === 0);
   }
 
   async onSave(): Promise<void> {
@@ -75,7 +80,7 @@ export default class DocumentBinding implements DocumentChannelListener {
       while (!(await this.update(edit))) {
         console.warn("tryApplyChanges: retrying");
       }
-      console.info("success Appling Changes");
+      console.info("success Applying Changes");
     } catch (err) {
       console.error("error", err);
     }
@@ -89,9 +94,13 @@ export default class DocumentBinding implements DocumentChannelListener {
   async applyWorkspaceEdits(
     document: vscode.TextDocument,
     edits: vscode.TextEdit[],
+    forceSave?: boolean,
   ): Promise<void> {
     const workspaceEdit = new vscode.WorkspaceEdit();
     workspaceEdit.set(document.uri, edits);
     await this.tryApplyChanges(workspaceEdit);
+    if (forceSave) {
+      await document.save();
+    }
   }
 }
