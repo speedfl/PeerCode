@@ -28,7 +28,16 @@ export default class DocumentBinding implements DocumentChannelListener {
       new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0)),
       text,
     );
-    await this.applyWorkspaceEdits(this.document, [textEdit]);
+    // When initializing a project, lot of files comes. It is done in two steps:
+    // Step one: the file is created without anything
+    // Step two: the file is edited with the full content, this results in opening the file in a tab
+    // When 100s to 1000s of files are opened in the editor, vscode freeze
+    // Therefore we let the possibility to force save the file on remoteTextChange when file is empty
+    await this.applyWorkspaceEdits(
+      this.document,
+      [textEdit],
+      this.document.getText().length === 0 && text?.length > 0,
+    );
   }
 
   async onRemoteTextChanges(changes: TextChange[]): Promise<void> {
@@ -36,12 +45,7 @@ export default class DocumentBinding implements DocumentChannelListener {
     const textEdits = changes.map(change => {
       return new vscode.TextEdit(createRange(change.start, change.end), change.text);
     });
-    // When initializing a project, lot of files comes. It is done in two steps:
-    // Step one: the file is created without anything
-    // Step two: the file is edited with the full content, this results in opening the file in a tab
-    // When 100s to 1000s of files are opened in the editor, vscode freeze
-    // Therefore we let the possibility to force save the file on remoteTextChange when file is empty
-    await this.applyWorkspaceEdits(this.document, textEdits, this.document.getText().length === 0);
+    await this.applyWorkspaceEdits(this.document, textEdits);
   }
 
   async onSave(): Promise<void> {
@@ -100,6 +104,7 @@ export default class DocumentBinding implements DocumentChannelListener {
     workspaceEdit.set(document.uri, edits);
     await this.tryApplyChanges(workspaceEdit);
     if (forceSave) {
+      console.log("force saving " + document.uri.fsPath);
       await document.save();
     }
   }
